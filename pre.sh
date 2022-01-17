@@ -69,12 +69,12 @@ sudo modprobe br_netfilter >> "${LOG_FILE}" 2>&1
 result "$?"
 
 output "Create k8s Modules Config"
-sudo wget -O /etc/modules-load.d/k8s.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-modules.conf
+sudo wget -O /etc/modules-load.d/k8s.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-modules.conf >> "${LOG_FILE}" 2>&1
 result "$?"
 
 # Configure Sysctl
 output "Create k8s Sysctl Bridge Config"
-sudo wget -O /etc/sysctl.d/k8s.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-sysctl.conf
+sudo wget -O /etc/sysctl.d/k8s.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-sysctl.conf >> "${LOG_FILE}" 2>&1
 result "$?"
 
 output "Apply Sysctl System Config"

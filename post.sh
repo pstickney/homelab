@@ -73,3 +73,7 @@ result "$?"
 output "Restart Kubelet"
 sudo systemctl restart kubelet >> "${LOG_FILE}" 2>&1
 result "$?"
+
+echo ""
+echo "Complete!"
+echo "You can now run kubeadm init or kubeadm join"
