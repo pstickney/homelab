@@ -27,7 +27,7 @@ sudo -v
 echo ""
 
 set -e
-## Get requirements
+# Get requirements
 echo "Update Packages"
 sudo yum update -y
 echo "Install Dependencies"
@@ -59,12 +59,7 @@ output "Set SELinux to Permissive"
 sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 result "$?"
 
-## Configure sysctl
-output "Create k8s Modules Config"
-echo "overlay" | sudo tee /etc/modules-load.d/k8s.conf > /dev/null
-echo "br_netfilter" | sudo tee -a /etc/modules-load.d/k8s.conf > /dev/null
-result "$?"
-
+# Configure Modules
 output "Probe Overlay Module"
 sudo modprobe overlay >> "${LOG_FILE}" 2>&1
 result "$?"
@@ -73,18 +68,20 @@ output "Probe Netfilter Module"
 sudo modprobe br_netfilter >> "${LOG_FILE}" 2>&1
 result "$?"
 
+output "Create k8s Modules Config"
+sudo wget -O /etc/modules-load.d/k8s.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-modules.conf
+result "$?"
+
+# Configure Sysctl
 output "Create k8s Sysctl Bridge Config"
-echo "net.bridge.bridge-nf-call-ip6tables = 1" | sudo tee /etc/sysctl.d/k8s.conf > /dev/null
-echo "net.bridge.bridge-nf-call-iptables = 1" | sudo tee -a /etc/sysctl.d/k8s.conf > /dev/null
-echo "net.bridge.bridge-nf-call-arptables = 1" | sudo tee -a /etc/sysctl.d/k8s.conf > /dev/null
-echo "net.ipv4.ip_forward = 1" | sudo tee -a /etc/sysctl.d/k8s.conf > /dev/null
+sudo wget -O /etc/sysctl.d/k8s.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-sysctl.conf
 result "$?"
 
 output "Apply Sysctl System Config"
 sudo sysctl --system >> "${LOG_FILE}" 2>&1
 result "$?"
 
-## Reboot system
+# Reboot system
 echo ""
 echo "Complete!"
 echo "You can now reboot the system"
