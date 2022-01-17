@@ -31,7 +31,7 @@ set -e
 echo "Update Packages"
 sudo yum update -y
 echo "Install Dependencies"
-sudo yum install -y epel-release qemu-guest-agent emacs tree git golang gcc gcc-c++ glibc-devel make ebtables ethtool net-tools curl wget gnupg openssh-server
+sudo yum install -y epel-release qemu-guest-agent emacs tree git golang gcc gcc-c++ glibc-devel make ebtables ethtool net-tools curl wget gnupg openssh-server google-noto-emoji-color-fonts
 echo ""
 set +e
 
@@ -88,5 +88,6 @@ result "$?"
 echo ""
 echo "Reboot the system"
 echo "Press any key to reboot..."
-read -n temp
+read temp
+echo "${temp}"
 #sudo shutdown -r now
