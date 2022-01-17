@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
-set -eux
+set -e
+set +x
 
 echo "Post"
