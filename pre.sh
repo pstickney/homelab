@@ -61,10 +61,8 @@ result "$?"
 
 ## Configure sysctl
 output "Create k8s Modules Config"
-cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
-overlay
-br_netfilter
-EOF >> "${LOG_FILE}" 2>&1
+echo "overlay" | sudo tee -a /etc/modules-load.d/k8s.conf
+echo "br_netfilter" | sudo tee -a /etc/modules-load.d/k8s.conf
 result "$?"
 
 output "Probe Overlay Module"
@@ -76,12 +74,10 @@ sudo modprobe br_netfilter >> "${LOG_FILE}" 2>&1
 result "$?"
 
 output "Create k8s Sysctl Bridge Config"
-cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
-net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables = 1
-net.bridge.bridge-nf-call-arptables = 1
-net.ipv4.ip_forward = 1
-EOF >> "${LOG_FILE}" 2>&1
+echo "net.bridge.bridge-nf-call-ip6tables = 1" | sudo tee -a /etc/sysctl.d/k8s.conf
+echo "net.bridge.bridge-nf-call-iptables = 1" | sudo tee -a /etc/sysctl.d/k8s.conf
+echo "net.bridge.bridge-nf-call-arptables = 1" | sudo tee -a /etc/sysctl.d/k8s.conf
+echo "net.ipv4.ip_forward = 1" | sudo tee -a /etc/sysctl.d/k8s.conf
 result "$?"
 
 output "Apply Sysctl System Config"
