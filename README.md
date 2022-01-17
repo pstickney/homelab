@@ -1,11 +1,10 @@
 # Kubernetes Home Lab
 
-## Pre
-```shell
-curl -s https://raw.githubusercontent.com/pstickney/homelab/master/pre.sh | bash
-```
+## Prerequisites
+1. pfSense
+2. Proxmox VE
 
-## Post
+## Install
 ```shell
-curl -s https://raw.githubusercontent.com/pstickney/homelab/master/post.sh | bash
+curl -s https://raw.githubusercontent.com/pstickney/homelab/master/install.sh | bash
 ```
