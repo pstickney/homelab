@@ -11,9 +11,9 @@ output() {
 }
 result() {
   if [ "$1" -eq "0" ]; then
-    printf '\U2714\UFE0F\n'
+    printf '[OK] \U2714\UFE0F\n'
   else
-    printf '\U274C\UFE0F\n'
+    printf '[Error] \U274C\UFE0F\n'
     echo ""
     echo "An error has occurred."
     echo "Review the log at ${LOG_FILE}"
