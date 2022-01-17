@@ -26,14 +26,14 @@ echo "Enter password for sudo access: "
 sudo -v
 echo ""
 
+set -e
 ## Get requirements
-output "Update Packages"
-sudo yum update -y > "${LOG_FILE}" 2>&1
-result "$?"
-output "Install Dependencies"
-sudo yum install -y epel-release qemu-guest-agent emacs tree git golang gcc gcc-c++ glibc-devel make ebtables ethtool net-tools curl wget gnupg openssh-server >> "${LOG_FILE}" 2>&1
-result "$?"
+echo "Update Packages"
+sudo yum update -y
+echo "Install Dependencies"
+sudo yum install -y epel-release qemu-guest-agent emacs tree git golang gcc gcc-c++ glibc-devel make ebtables ethtool net-tools curl wget gnupg openssh-server
 echo ""
+set +e
 
 # Turn off swap
 output "Disable Swap"
@@ -64,7 +64,7 @@ output "Create k8s Modules Config"
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
-EOF
+EOF >> "${LOG_FILE}" 2>&1
 result "$?"
 
 output "Probe Overlay Module"
@@ -81,7 +81,7 @@ net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 net.bridge.bridge-nf-call-arptables = 1
 net.ipv4.ip_forward = 1
-EOF
+EOF >> "${LOG_FILE}" 2>&1
 result "$?"
 
 output "Apply Sysctl System Config"
@@ -92,5 +92,5 @@ result "$?"
 echo ""
 echo "Reboot the system"
 echo "Press any key to reboot..."
-read temp
+read -n temp
 #sudo shutdown -r now
