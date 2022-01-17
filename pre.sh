@@ -86,8 +86,5 @@ result "$?"
 
 ## Reboot system
 echo ""
-echo "Reboot the system"
-echo "Press any key to reboot..."
-read temp
-echo "${temp}"
-#sudo shutdown -r now
+echo "Complete!"
+echo "You can now reboot the system"
