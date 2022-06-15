@@ -35,8 +35,9 @@ output "Add Docker Yum Repo"
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo >> "${LOG_FILE}" 2>&1
 result "$?"
 
-set -e
 # Get requirements
+set -e
+echo ""
 echo "Update Packages"
 sudo yum update -y
 echo "Install Dependencies"
@@ -96,6 +97,11 @@ sudo mkdir -p /etc/docker/ >> "${LOG_FILE}" 2>&1
 result "$?"
 output "Update Docker cgroup driver to systemd"
 sudo wget -O /etc/docker/daemon.json https://raw.githubusercontent.com/pstickney/homelab/master/config/docker-daemon.json >> "${LOG_FILE}" 2>&1
+result "$?"
+
+# Delete containerd config
+output "Delete containerd config"
+sudo rm -f /etc/containerd/config.toml >> "${LOG_FILE}" 2>&1
 result "$?"
 
 # Daemon Reload

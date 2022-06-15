@@ -1,9 +1,20 @@
 # Kubernetes Home Lab
 
 ## Technologies
-1. [pfSense][pfsense-download] - an open-source powerful, flexible firewalling and routing platform
+1. [pfSense][pfsense-download] - an open-source firewall and routing platform
 2. [Proxmox VE][proxmox-download] - an open-source platform for enterprise virtualization
-3. [CentOS 7][centos-download] - a community-driven Linux distribution derived from RHEL
+3. [CentOS 7][centos-download] - an open-source, community-driven Linux distribution derived from RHEL
+
+## Overview
+
+For this lab, I'm using Proxmox as a hypervisor to create VMs.
+Here is a breakdown of the VMs.
+
+|       Machine       | Type | OS | CPU | RAM | Storage |  IP Address   |
+|:-------------------:| :---: | :---: | :---: | :---: |:-------:|:-------------:|
+| k8s-control-plane-1 | Master | CentOS 7 | 4 | 8 |   32    | 192.168.1.200 |
+|    k8s-compute-1    | Worker | CentOS 7 | 4 | 8 |   32    | 192.168.1.204 |
+|    k8s-compute-2    | Worker | CentOS 7 | 4 | 8 |   32    | 192.168.1.205 |
 
 ## Prerequisites
 1. Upload the CentOS 7 ISO to Proxmox storage
@@ -15,7 +26,7 @@
 2. Give the new VM a name of `k8s-template`
 3. Select the CentOS 7 image uploaded earlier as the OS
 4. Enable the Qemu Agent
-5. Set the Disk size to 120GiB
+5. Set the Disk size to 32GiB
 6. Set the Cores to 4
 7. Set the Memory to 8192MiB
 8. Don't start after created
@@ -59,6 +70,44 @@
    ```shell
    curl -s https://raw.githubusercontent.com/pstickney/homelab/master/setup.sh | bash
    ```
+
+## Create Kubernetes Control Plane
+1. On the control plane node
+2. Pull the latest kubeadm images
+
+   ```shell
+   sudo kubeadm config images pull
+   ```
+3. Initialize control plane
+
+   ```shell
+   sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --service-cidr=10.246.0.0/16 \
+          --control-plane-endpoint=192.168.1.200 --apiserver-advertise-address=192.168.1.200
+   ```
+
+## Copy ~/.kube/config
+```shell
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown -R $(id -u):$(id -g) $HOME/.kube
+```
+
+## Install CNI
+Install the Flannel CNI
+
+```shell
+kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+```
+
+## Join Worker Nodes
+
+Use the join command that the call to `kubeadm init` provided to join the remaining 
+worker nodes to the cluster.
+
+```shell
+sudo kubeadm join 192.168.1.200:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
+```
+
 
 [pfsense-download]: https://www.pfsense.org/download/
 [proxmox-download]: https://www.proxmox.com/en/downloads/category/iso-images-pve
