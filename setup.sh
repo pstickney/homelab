@@ -41,7 +41,7 @@ echo ""
 echo "Update Packages"
 sudo yum update -y
 echo "Install Dependencies"
-sudo yum install -y epel-release qemu-guest-agent emacs tree git golang gcc gcc-c++ glibc-devel make ebtables ethtool net-tools curl wget gnupg openssh-server google-noto-emoji-color-fonts docker-ce docker-ce-cli containerd.io kubelet kubeadm kubectl
+sudo yum install -y epel-release qemu-guest-agent emacs tree git golang gcc gcc-c++ glibc-devel make ebtables ethtool net-tools nfs-utils curl wget gnupg openssh-server google-noto-emoji-color-fonts docker-ce docker-ce-cli containerd.io kubelet kubeadm kubectl
 echo ""
 set +e
 
