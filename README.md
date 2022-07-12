@@ -10,11 +10,11 @@
 For this lab, I'm using Proxmox as a hypervisor to create VMs.
 Here is a breakdown of the VMs.
 
-|       Machine       | Type | OS | CPU | RAM | Storage |  IP Address   |
-|:-------------------:| :---: | :---: | :---: | :---: |:-------:|:-------------:|
-| k8s-control-plane-1 | Master | CentOS 7 | 4 | 8 |   32    | 192.168.1.200 |
-|    k8s-compute-1    | Worker | CentOS 7 | 4 | 8 |   32    | 192.168.1.204 |
-|    k8s-compute-2    | Worker | CentOS 7 | 4 | 8 |   32    | 192.168.1.205 |
+|       Machine       |  Type  |    OS    |  CPU   |  RAM   | Storage |  IP Address   |
+|:-------------------:|:------:|:--------:|:------:|:------:|:-------:|:-------------:|
+| k8s-control-plane-1 | Master | CentOS 7 |   4    |   8    |   32    | 192.168.1.200 |
+|    k8s-compute-1    | Worker | CentOS 7 |   4    |   8    |   32    | 192.168.1.204 |
+|    k8s-compute-2    | Worker | CentOS 7 |   4    |   8    |   32    | 192.168.1.205 |
 
 ## Prerequisites
 1. Upload the CentOS 7 ISO to Proxmox storage
