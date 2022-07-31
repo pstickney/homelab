@@ -17,7 +17,7 @@ brew "k9s"
 brew "openjdk@11"
 brew "golang"
 
-#Networking
+# Networking
 brew "net-tools"
 brew "curl"
 brew "wget"
