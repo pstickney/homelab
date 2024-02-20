@@ -11,11 +11,11 @@
 For this lab, I'm using Proxmox as a hypervisor to create VMs.
 Here is a breakdown of the VMs.
 
-|       Machine       |  Type  |  CPU   |  RAM   | Storage |  IP Address   |
-|:-------------------:|:------:|:-------------:|:------:|:------:|:-------:|
-| k8s-control-plane-1 | Master |   4    |   8    |   32    | 192.168.1.200 |
-|    k8s-compute-1    | Worker |   4    |   8    |   32    | 192.168.1.204 |
-|    k8s-compute-2    | Worker |   4    |   8    |   32    | 192.168.1.205 |
+|       Machine       |  Type  |  CPU   | RAM | Storage |  IP Address   |
+|:-------------------:|:------:|:-------------:|:---:|:-------:|:-------:|
+| k8s-control-plane-1 | Master |   4    | 12  |   48    | 192.168.1.200 |
+|    k8s-compute-1    | Worker |   4    | 12  |   48    | 192.168.1.204 |
+|    k8s-compute-2    | Worker |   4    | 12  |   48    | 192.168.1.205 |
 
 ## Prerequisites
 1. Upload the ISO to Proxmox storage
@@ -27,9 +27,9 @@ Here is a breakdown of the VMs.
 2. Give the new VM a name of `k8s-template`
 3. Select the ISO image uploaded earlier as the OS
 4. Enable the Qemu Agent
-5. Set the Disk size to 32GiB
+5. Set the Disk size to 48GiB
 6. Set the Cores to 4
-7. Set the Memory to 8192MiB
+7. Set the Memory to 12288MiB
 8. Don't start after created
 
 ## Setup DHCP
@@ -45,31 +45,17 @@ Here is a breakdown of the VMs.
 
    <img src="images/template_dhcp.png" width="500">
 
-## Install CentOS 7 on VM 
+## Install Ubuntu on VM 
 1. Start the VM
-2. Select `Install CentOS 7`
-
-   <img src="images/install_centos_7.png" width="500" />
-
-3. Update `Software Selection` to a Compute Node and add additional Add-Ons
-
-   <img src="images/install_centos_7_software_selection.png" width="500" />
-
-4. Update `Network & Host Name` to turn on the Ethernet connection
-   
-   We can confirm that the IP Address is the same as the IP Address we setup in pfSense  
-
-   <img src="images/install_centos_7_network.png" width="500" />
-
-5. Begin Installation
-6. Set `Root Password` and create your user
-7. Reboot once installation has completed
+2. Select `Install Ubuntu`
+3. Follow install process
+4. Reboot once installation has completed
 
 ## Setup Kubernetes Requirements
 1. Login to the VM and run this script
 
    ```shell
-   curl -s https://raw.githubusercontent.com/pstickney/homelab/master/setup-ubuntu.sh?token=TOKEN | bash -s TOKEN
+   curl -s https://raw.githubusercontent.com/pstickney/homelab/master/setup-ubuntu.sh?token=TOKEN | bash
    ```
 
 ## Create Kubernetes Control Plane
