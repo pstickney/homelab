@@ -145,6 +145,11 @@ output "Restart Kubelet"
 sudo systemctl restart kubelet >> "${LOG_FILE}" 2>&1
 result "$?"
 
+# Setting permissions
+output "Add user to docker group"
+sudo usermod -aG docker ${USER}
+result "$?"
+
 # Done
 echo ""
 echo "You can now shutdown and clone this VM."
