@@ -55,7 +55,7 @@ Here is a breakdown of the VMs.
 1. Login to the VM and run this script
 
    ```shell
-   curl -s https://raw.githubusercontent.com/pstickney/homelab/master/setup-ubuntu.sh?token=TOKEN | bash
+   curl -s https://raw.githubusercontent.com/pstickney/homelab/master/setup-ubuntu.sh | bash
    ```
 
 ## Create Kubernetes Control Plane
