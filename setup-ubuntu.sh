@@ -2,6 +2,7 @@
 
 set +x
 
+TOKEN="$1"
 LOG_FILE="./homelab-k8s.log"
 
 output() {
@@ -85,7 +86,7 @@ result "$?"
 
 # Disable SELinux
 output "Disable SELinux"
-echo 'SELINUX=disabled' | sudo tee /etc/selinux/config
+echo 'SELINUX=disabled' | sudo tee /etc/selinux/config >> "${LOG_FILE}" 2>&1
 result "$?"
 
 # Configure Modules
@@ -98,12 +99,12 @@ sudo modprobe br_netfilter >> "${LOG_FILE}" 2>&1
 result "$?"
 
 output "Create k8s Modules Config"
-sudo wget -O /etc/modules-load.d/k8s.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-modules.conf >> "${LOG_FILE}" 2>&1
+sudo wget -O /etc/modules-load.d/k8s.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-modules.conf?token="${TOKEN}" >> "${LOG_FILE}" 2>&1
 result "$?"
 
 # Configure Sysctl
 output "Create k8s Sysctl Bridge Config"
-sudo wget -O /etc/sysctl.d/k8s.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-sysctl.conf >> "${LOG_FILE}" 2>&1
+sudo wget -O /etc/sysctl.d/k8s.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-sysctl.conf?token="${TOKEN}" >> "${LOG_FILE}" 2>&1
 result "$?"
 
 output "Apply Sysctl System Config"
@@ -115,7 +116,7 @@ output "Create /etc/docker/"
 sudo mkdir -p /etc/docker/ >> "${LOG_FILE}" 2>&1
 result "$?"
 output "Update Docker cgroup driver to systemd"
-sudo wget -O /etc/docker/daemon.json https://raw.githubusercontent.com/pstickney/homelab/master/config/docker-daemon.json >> "${LOG_FILE}" 2>&1
+sudo wget -O /etc/docker/daemon.json https://raw.githubusercontent.com/pstickney/homelab/master/config/docker-daemon.json?token="${TOKEN}" >> "${LOG_FILE}" 2>&1
 result "$?"
 
 # Delete containerd config
