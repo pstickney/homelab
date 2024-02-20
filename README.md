@@ -4,27 +4,28 @@
 1. [pfSense][pfsense-download] - an open-source firewall and routing platform
 2. [Proxmox VE][proxmox-download] - an open-source platform for enterprise virtualization
 3. [CentOS 7][centos-download] - an open-source, community-driven Linux distribution derived from RHEL
+4. [Ubuntu Server][ubuntu-download] - a Linux distribution based on Debian and composed mostly of free and open-source software
 
 ## Overview
 
 For this lab, I'm using Proxmox as a hypervisor to create VMs.
 Here is a breakdown of the VMs.
 
-|       Machine       |  Type  |    OS    |  CPU   |  RAM   | Storage |  IP Address   |
-|:-------------------:|:------:|:--------:|:------:|:------:|:-------:|:-------------:|
-| k8s-control-plane-1 | Master | CentOS 7 |   4    |   8    |   32    | 192.168.1.200 |
-|    k8s-compute-1    | Worker | CentOS 7 |   4    |   8    |   32    | 192.168.1.204 |
-|    k8s-compute-2    | Worker | CentOS 7 |   4    |   8    |   32    | 192.168.1.205 |
+|       Machine       |  Type  |  CPU   |  RAM   | Storage |  IP Address   |
+|:-------------------:|:------:|:-------------:|:------:|:------:|:-------:|
+| k8s-control-plane-1 | Master |   4    |   8    |   32    | 192.168.1.200 |
+|    k8s-compute-1    | Worker |   4    |   8    |   32    | 192.168.1.204 |
+|    k8s-compute-2    | Worker |   4    |   8    |   32    | 192.168.1.205 |
 
 ## Prerequisites
-1. Upload the CentOS 7 ISO to Proxmox storage
+1. Upload the ISO to Proxmox storage
 
     <img src="images/iso_upload.png" />
 
 ## Setup Kubernetes Template VM
 1. In Proxmox, create a VM
 2. Give the new VM a name of `k8s-template`
-3. Select the CentOS 7 image uploaded earlier as the OS
+3. Select the ISO image uploaded earlier as the OS
 4. Enable the Qemu Agent
 5. Set the Disk size to 32GiB
 6. Set the Cores to 4
@@ -112,3 +113,4 @@ sudo kubeadm join 192.168.1.200:6443 --token <token> --discovery-token-ca-cert-h
 [pfsense-download]: https://www.pfsense.org/download/
 [proxmox-download]: https://www.proxmox.com/en/downloads/category/iso-images-pve
 [centos-download]: https://www.centos.org/download/
+[ubuntu-download]: https://ubuntu.com/download/server
