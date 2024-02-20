@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+/etc/sysctl.d
+/etc/init.d/procps restart

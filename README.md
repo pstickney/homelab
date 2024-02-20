@@ -50,13 +50,15 @@ Here is a breakdown of the VMs.
 
 1. Clone `base-vm-template` and name it `k8s-template` with ID 219
 2. Follow the same [Setup DHCP](#setup-dhcp) steps for the `k8s-template` VM
-3. Update the `/etc/hostname` to `k8s-template`
-4. Update the `/etc/hosts` to `k8s-template`
-5. Reboot the VM
+3. Run host rename
+   ```shell
+   curl -s https://raw.githubusercontent.com/pstickney/homelab/master/rename-host.sh | bash -s HOST
+   ```
+4. Reboot the VM
    ```shell
    sudo reboot
    ```
-6. Install Docker and Kubernetes with this script
+5. Install Docker and Kubernetes with this script
    ```shell
    curl -s https://raw.githubusercontent.com/pstickney/homelab/master/setup.sh | bash
    ```
@@ -64,26 +66,28 @@ Here is a breakdown of the VMs.
 ## Create Kubernetes Control Plane
 1. Clone the `k8s-template` and name it `k8s-master-1` with ID 200
 2. Follow the same [Setup DHCP](#setup-dhcp) steps for the `k8s-master-1` VM
-3. Update the `/etc/hostname` to `k8s-master-1`
-4. Update the `/etc/hosts` to `k8s-master-1`
-5. Reboot the VM
+3. Run host rename
+   ```shell
+   curl -s https://raw.githubusercontent.com/pstickney/homelab/master/rename-host.sh | bash -s HOST
+   ```
+4. Reboot the VM
    ```shell
    sudo reboot
    ```
-6. Pull the latest kubeadm images
+5. Pull the latest kubeadm images
    ```shell
    sudo kubeadm config images pull
    ```
-7. Initialize control plane
+6. Initialize control plane
    ```shell
    sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --service-cidr=10.246.0.0/16 \
           --control-plane-endpoint=192.168.1.200 --apiserver-advertise-address=192.168.1.200
    ```
-8. Install the Flannel CNI
+7. Install the Flannel CNI
    ```shell
    kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
    ```
-9. Copy kubeconfig file
+8. Copy kubeconfig file
    ```shell
    mkdir -p $HOME/.kube
    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -93,17 +97,19 @@ Here is a breakdown of the VMs.
 ## Create Kubernetes Worker Nodes
 1. Clone the `k8s-template` and name it `k8s-worker-1` with ID 205
 2. Follow the same [Setup DHCP](#setup-dhcp) steps for the `k8s-worker-1` VM
-3. Update the `/etc/hostname` to `k8s-worker-1`
-4. Update the `/etc/hosts` to `k8s-worker-1`
-5. Reboot the VM
+3. Run host rename
+   ```shell
+   curl -s https://raw.githubusercontent.com/pstickney/homelab/master/rename-host.sh | bash -s HOST
+   ```
+4. Reboot the VM
    ```shell
    sudo reboot
    ```
-6. Join the worker node to the cluster
+5. Join the worker node to the cluster
    ```shell
    sudo kubeadm join 192.168.1.200:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
    ```
-7. Repeat for any more worker nodes
+6. Repeat for any more worker nodes
 
 [pfsense-download]: https://www.pfsense.org/download/
 [proxmox-download]: https://www.proxmox.com/en/downloads/category/iso-images-pve
