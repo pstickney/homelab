@@ -83,15 +83,15 @@ Here is a breakdown of the VMs.
    sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --service-cidr=10.246.0.0/16 \
           --control-plane-endpoint=192.168.1.200 --apiserver-advertise-address=192.168.1.200
    ```
-7. Install the Flannel CNI
-   ```shell
-   kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
-   ```
-8. Copy kubeconfig file
+7. Copy kubeconfig file
    ```shell
    mkdir -p $HOME/.kube
    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
    sudo chown -R $(id -u):$(id -g) $HOME/.kube
+   ```
+8. Install the Flannel CNI
+   ```shell
+   kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
    ```
 
 ## Create Kubernetes Worker Nodes
