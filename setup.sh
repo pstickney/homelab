@@ -121,7 +121,6 @@ output "Apply Sysctl System Config"
 sudo sysctl --system >> "${LOG_FILE}" 2>&1
 result "$?"
 
-# Switch Docker cgroup driver to systemd
 output "Create /etc/docker/"
 sudo mkdir -p /etc/docker/ >> "${LOG_FILE}" 2>&1
 result "$?"
@@ -130,17 +129,22 @@ output "Update Docker cgroup driver to systemd"
 sudo wget -O /etc/docker/daemon.json https://raw.githubusercontent.com/pstickney/homelab/master/config/docker-daemon.json >> "${LOG_FILE}" 2>&1
 result "$?"
 
-# Delete containerd config
-output "Delete containerd config"
-sudo rm -f /etc/containerd/config.toml >> "${LOG_FILE}" 2>&1
+output "Create /etc/containerd/"
+sudo mkdir -p /etc/containerd/ >> "${LOG_FILE}" 2>&1
 result "$?"
 
-# Daemon Reload
+output "Create default containerd config"
+containerd config default | sudo tee /etc/containerd/config.toml >> "${LOG_FILE}" 2>&1
+result "$?"
+
+output "Update containerd cgroup"
+sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml >> "${LOG_FILE}" 2>&1
+result "$?"
+
 output "Daemon Reload"
 sudo systemctl daemon-reload >> "${LOG_FILE}" 2>&1
 result "$?"
 
-# Docker
 output "Enable Docker"
 sudo systemctl enable docker >> "${LOG_FILE}" 2>&1
 result "$?"
