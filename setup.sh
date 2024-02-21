@@ -101,16 +101,12 @@ output "Create k8s Modules Config"
 sudo wget -O /etc/modules-load.d/k8s.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-modules.conf >> "${LOG_FILE}" 2>&1
 result "$?"
 
-output "Disable IPv6"
+output "Disable IPv6 in sysctl"
 sudo wget -O /etc/sysctl.d/90-disable-ipv6.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-sysctl.conf >> "${LOG_FILE}" 2>&1
 result "$?"
 
-output "Reload sysctl config"
-sudo sysctl -p
-result "$?"
-
-output "Restart procps"
-sudo systemctl restart procps
+output "Disable IPv6 in grub"
+sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"ipv6.disable=1\"/" /etc/default/grub
 result "$?"
 
 output "Create rc.local"
