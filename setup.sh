@@ -101,8 +101,16 @@ output "Create k8s Modules Config"
 sudo wget -O /etc/modules-load.d/k8s.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-modules.conf >> "${LOG_FILE}" 2>&1
 result "$?"
 
-output "Create k8s Sysctl Bridge Config"
-sudo wget -O /etc/sysctl.d/k8s.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-sysctl.conf >> "${LOG_FILE}" 2>&1
+output "Disable IPv6"
+sudo wget -O /etc/sysctl.d/90-disable-ipv6.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-sysctl.conf >> "${LOG_FILE}" 2>&1
+result "$?"
+
+output "Reload sysctl config"
+sudo sysctl -p
+result "$?"
+
+output "Restart procps"
+sudo systemctl restart procps
 result "$?"
 
 output "Create rc.local"
