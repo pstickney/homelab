@@ -106,7 +106,11 @@ sudo wget -O /etc/sysctl.d/90-disable-ipv6.conf https://raw.githubusercontent.co
 result "$?"
 
 output "Disable IPv6 in grub"
-sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"ipv6.disable=1\"/" /etc/default/grub
+sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"ipv6.disable=1\"/" /etc/default/grub >> "${LOG_FILE}" 2>&1
+result "$?"
+
+output "Update grub"
+sudo update-grub >> "${LOG_FILE}" 2>&1
 result "$?"
 
 output "Create rc.local"
