@@ -159,9 +159,8 @@ output "Restart Kubelet"
 sudo systemctl restart kubelet >> "${LOG_FILE}" 2>&1
 result "$?"
 
-# Setting permissions
-output "Add user to docker group"
-sudo usermod -aG docker ${USER} >> "${LOG_FILE}" 2>&1
+output "Create docker -> nerdctl alias"
+echo "alias docker='sudo nerdctl'" > "$HOME/.bash_aliases"
 result "$?"
 
 # Done
