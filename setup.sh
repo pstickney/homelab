@@ -30,27 +30,27 @@ output "Initializing log file"
 echo "" > "${LOG_FILE}" 2>&1
 result "$?"
 
-output "Creating keyring"
+output "Installing preliminary packages"
+sudo apt update -y >> "${LOG_FILE}" 2>&1
+sudo apt install -y apt-transport-https ca-certificates software-properties-common lsb-release emacs tree git golang gcc make ebtables ethtool net-tools nfs-common curl wget gnupg openssh-server >> "${LOG_FILE}" 2>&1
+result "$?"
+
+output "Creating Keyring"
 sudo mkdir -p /etc/apt/keyrings/ >> "${LOG_FILE}" 2>&1
 result "$?"
 
-output "Installing preliminary packages"
-sudo apt update -y >> "${LOG_FILE}" 2>&1
-sudo apt install -y apt-transport-https ca-certificates curl software-properties-common >> "${LOG_FILE}" 2>&1
-result "$?"
-
 # Add Docker Repo
-output "Getting Docker GPG key"
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+output "Adding Docker GPG to Keyring"
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg >> "${LOG_FILE}" 2>&1
 result "$?"
 output "Creating Docker APT source"
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] \
-      https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+      https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | \
       sudo tee /etc/apt/sources.list.d/docker.list >> "${LOG_FILE}" 2>&1
 result "$?"
 
 # Add Kubernetes repo
-output "Getting Kubernetes GPG key"
+output "Adding Kubernetes GPG to Keyring"
 curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes.gpg >> "${LOG_FILE}" 2>&1
 result "$?"
 output "Creating Kubernetes APT source"
@@ -63,8 +63,27 @@ result "$?"
 output "Update Packages"
 sudo apt update -y >> "${LOG_FILE}" 2>&1
 result "$?"
-output "Install Dependencies"
-sudo apt install -y qemu-guest-agent emacs tree git golang gcc make ebtables ethtool net-tools nfs-common curl wget gnupg openssh-server docker-ce docker-ce-cli containerd.io kubelet kubeadm kubectl >> "${LOG_FILE}" 2>&1
+output "Install Containerd and Kubernetes"
+sudo apt install -y qemu-guest-agent containerd.io kubelet kubeadm kubectl >> "${LOG_FILE}" 2>&1
+result "$?"
+
+output "Create /etc/containerd/"
+sudo mkdir -p /etc/containerd/ >> "${LOG_FILE}" 2>&1
+result "$?"
+
+output "Create default containerd config"
+containerd config default | sudo tee /etc/containerd/config.toml >> "${LOG_FILE}" 2>&1
+result "$?"
+
+output "Update containerd cgroup"
+sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml >> "${LOG_FILE}" 2>&1
+result "$?"
+
+output "Download nerdctl"
+wget -O /tmp/nerdctl.tar.gz https://github.com/containerd/nerdctl/releases/download/v1.7.4/nerdctl-1.7.4-linux-amd64.tar.gz >> "${LOG_FILE}" 2>&1
+result "$?"
+output "Extract nerdctl"
+sudo tar xvzf /tmp/nerdctl.tar.gz -C /usr/local/bin/ >> "${LOG_FILE}" 2>&1
 result "$?"
 
 # Turn off swap
@@ -72,7 +91,7 @@ output "Disable Swap"
 sudo swapoff -a >> "${LOG_FILE}" 2>&1
 result "$?"
 output "Remove Swap Mount"
-sudo sed -i '/swap/d' /etc/fstab
+sudo sed -i '/swap/d' /etc/fstab >> "${LOG_FILE}" 2>&1
 result "$?"
 
 # Disable Firewall
@@ -102,7 +121,7 @@ sudo wget -O /etc/modules-load.d/k8s.conf https://raw.githubusercontent.com/psti
 result "$?"
 
 output "Disable IPv6 in sysctl"
-sudo wget -O /etc/sysctl.d/90-disable-ipv6.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-sysctl.conf >> "${LOG_FILE}" 2>&1
+sudo wget -O /etc/sysctl.d/90-disable-ipv6.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/90-disable-ipv6.conf >> "${LOG_FILE}" 2>&1
 result "$?"
 
 output "Disable IPv6 in grub"
@@ -121,35 +140,15 @@ output "Apply Sysctl System Config"
 sudo sysctl --system >> "${LOG_FILE}" 2>&1
 result "$?"
 
-output "Create /etc/docker/"
-sudo mkdir -p /etc/docker/ >> "${LOG_FILE}" 2>&1
-result "$?"
-
-output "Update Docker cgroup driver to systemd"
-sudo wget -O /etc/docker/daemon.json https://raw.githubusercontent.com/pstickney/homelab/master/config/docker-daemon.json >> "${LOG_FILE}" 2>&1
-result "$?"
-
-output "Create /etc/containerd/"
-sudo mkdir -p /etc/containerd/ >> "${LOG_FILE}" 2>&1
-result "$?"
-
-output "Create default containerd config"
-containerd config default | sudo tee /etc/containerd/config.toml >> "${LOG_FILE}" 2>&1
-result "$?"
-
-output "Update containerd cgroup"
-sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml >> "${LOG_FILE}" 2>&1
-result "$?"
-
 output "Daemon Reload"
 sudo systemctl daemon-reload >> "${LOG_FILE}" 2>&1
 result "$?"
 
-output "Enable Docker"
-sudo systemctl enable docker >> "${LOG_FILE}" 2>&1
+output "Enable containerd"
+sudo systemctl enable containerd >> "${LOG_FILE}" 2>&1
 result "$?"
-output "Restart Docker"
-sudo systemctl restart docker >> "${LOG_FILE}" 2>&1
+output "Restart containerd"
+sudo systemctl restart containerd >> "${LOG_FILE}" 2>&1
 result "$?"
 
 # Kubelet
@@ -162,7 +161,7 @@ result "$?"
 
 # Setting permissions
 output "Add user to docker group"
-sudo usermod -aG docker ${USER}
+sudo usermod -aG docker ${USER} >> "${LOG_FILE}" 2>&1
 result "$?"
 
 # Done
