@@ -89,9 +89,12 @@ Here is a breakdown of the VMs.
    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
    sudo chown -R $(id -u):$(id -g) $HOME/.kube
    ```
-8. Install the Flannel CNI
+8. Install the Flannel CNI or Calico CNI
    ```shell
    kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
+   ```
+   ```shell
+   kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/master/manifests/calico.yaml
    ```
 
 ## Create Kubernetes Worker Nodes
