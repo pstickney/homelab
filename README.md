@@ -44,7 +44,13 @@ Here is a breakdown of the VMs.
 1. Start the VM
 2. Select `Install Ubuntu`
 3. Follow install process
-4. Reboot once installation has completed
+4. Update dependencies and install QEMU agent
+   ```shell
+   sudo apt update -y
+   sudo apt upgrade -y
+   sudo apt install -y qemu-guest-agent
+   ```
+5. Shutdown VM
 
 ## Create Kubernetes Template VM
 
