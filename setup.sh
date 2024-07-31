@@ -156,7 +156,7 @@ sudo systemctl restart kubelet >> "${LOG_FILE}" 2>&1
 result "$?"
 
 output "Create docker -> nerdctl alias"
-echo "alias docker='sudo nerdctl'" > "$HOME/.bash_aliases" >> "${LOG_FILE}" 2>&1
+echo "alias docker='sudo nerdctl'" >> "$HOME/.bash_aliases"
 result "$?"
 
 # Done
