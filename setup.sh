@@ -49,10 +49,10 @@ result "$?"
 
 # Add Kubernetes repo
 output "Adding Kubernetes GPG to Keyring"
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes.gpg >> "${LOG_FILE}" 2>&1
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes.gpg >> "${LOG_FILE}" 2>&1
 result "$?"
 output "Creating Kubernetes APT source"
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/kubernetes.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list >> "${LOG_FILE}" 2>&1
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/kubernetes.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list >> "${LOG_FILE}" 2>&1
 result "$?"
 
 # Get requirements
@@ -76,7 +76,7 @@ sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/c
 result "$?"
 
 output "Download nerdctl"
-wget -O /tmp/nerdctl.tar.gz https://github.com/containerd/nerdctl/releases/download/v1.7.6/nerdctl-1.7.6-linux-amd64.tar.gz >> "${LOG_FILE}" 2>&1
+wget -O /tmp/nerdctl.tar.gz https://github.com/containerd/nerdctl/releases/download/v2.0.3/nerdctl-2.0.3-linux-amd64.tar.gz >> "${LOG_FILE}" 2>&1
 result "$?"
 output "Extract nerdctl"
 sudo tar xvzf /tmp/nerdctl.tar.gz -C /usr/local/bin/ >> "${LOG_FILE}" 2>&1
