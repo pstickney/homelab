@@ -8,5 +8,5 @@ networking:
   disableDefaultCNI: true
   apiServerAddress: 192.168.1.200
   apiServerPort: 6443
-  podSubnet: "10.1.0.0/17"
-  serviceSubnet: "10.1.128.0/17"
+  podSubnet: "10.0.0.0/17"
+  serviceSubnet: "10.0.128.0/17"

@@ -14,16 +14,16 @@
 
 ### Provision Resources
 1. In Proxmox, create a VM
-2. Give the VM a name of `kind-cluster1` with ID 200
+2. Give the VM a name of `kind-cluster0` with ID 200
 3. Select the ISO image uploaded earlier as the OS
 4. Enable the Qemu Agent
-5. Set the disk size to 48GiB
+5. Set the disk size to 512GiB
 6. Set the cores to 4
 7. Set the memory to 32768MiB
 8. Don't start after created
 
 ### Setup DHCP
-1. In Proxmox, select the new `kind-cluster1` VM
+1. In Proxmox, select the new `kind-cluster0` VM
 2. Select `Hardware`
 3. Copy the Network Device MAC address
 4. In pfSense, select `Services -> DHCP Server`
@@ -59,25 +59,43 @@
 2. Update the file such that the subnets are the same as the ID of the cluster name.
    ```shell
    Example: cluster1
+      apiServerAddress: 192.168.1.201
       podSubnet: "10.1.0.0/17"
       serviceSubnet: "10.1.128.0/17"
    
    Example: cluster5
+      apiServerAddress: 192.168.1.205
       podSubnet: "10.5.0.0/17"
       serviceSubnet: "10.5.128.0/17"
    ```
 3. Create kind cluster with:
    ```shell
-   kind create cluster --name cluster1 --config kind-cluster.yaml
+   kind create cluster --name cluster<num> --config kind-cluster.yaml
    ```
 
-### Install CNI
+### Setup Networking
 
-> [!NOTE]
-> WIP
+1. Checkout the [charts][charts] repo 
+2. Install Cilium
+   ```shell
+   helm upgrade --install --create-namespace -n cilium lab cilium
+   ```
+
+2. Update CoreDNS
+   ```shell
+   kubectl apply -f cilium-config/coredns.yaml
+   ```
+
+## Configure 
+
+1. Install ArgoCD
+   ```shell
+   helm upgrade --install --create-namespace -n argocd lab argo-cd
+   ```
 
 [pfsense-download]: https://www.pfsense.org/download/
 [proxmox-download]: https://www.proxmox.com/en/downloads/category/iso-images-pve
 [ubuntu-download]: https://ubuntu.com/download/server
 [kind-download]: https://kind.sigs.k8s.io/
 [dotfiles]: https://github.com/pstickney/dotfiles
+[charts]: https://github.com/pstickney/charts
