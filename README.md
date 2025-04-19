@@ -97,6 +97,10 @@
    ```shell
    helm upgrade --install --create-namespace -n argocd lab argo-cd
    ```
+2. Install app-of-apps from argo-registry
+   ```shell
+   kubectl apply -f app-of-apps.yaml
+   ```
 
 [pfsense-download]: https://www.pfsense.org/download/
 [proxmox-download]: https://www.proxmox.com/en/downloads/category/iso-images-pve
