@@ -37,13 +37,18 @@
 1. Start the VM
 2. Select `Install Ubuntu`
 3. Follow install process
-4. Update dependencies and install QEMU agent
+4. Update apt repo and install dependencies
    ```shell
    sudo apt update -y
    sudo apt upgrade -y
-   sudo apt install -y qemu-guest-agent
+   sudo apt install -y ca-certificates gcc curl gnupg qemu-guest-agent docker.io
    ```
-5. Restart VM
+5. Add your user to docker group
+   ```shell
+   sudo usermod -aG docker $USER
+   ```
+6. Restart VM
+
 
 ## Create Cluster
 
