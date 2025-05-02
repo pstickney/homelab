@@ -113,11 +113,11 @@ sudo modprobe br_netfilter >> "${LOG_FILE}" 2>&1
 result "$?"
 
 output "Create k8s Modules Config"
-sudo wget -O /etc/modules-load.d/k8s.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/k8s-modules.conf >> "${LOG_FILE}" 2>&1
+sudo wget -O /etc/modules-load.d/k8s.conf https://raw.githubusercontent.com/pstickney/homelab/refs/heads/master/kubeadm/config/k8s-modules.conf >> "${LOG_FILE}" 2>&1
 result "$?"
 
 output "Disable IPv6 in sysctl"
-sudo wget -O /etc/sysctl.d/90-disable-ipv6.conf https://raw.githubusercontent.com/pstickney/homelab/master/config/90-disable-ipv6.conf >> "${LOG_FILE}" 2>&1
+sudo wget -O /etc/sysctl.d/90-disable-ipv6.conf https://raw.githubusercontent.com/pstickney/homelab/refs/heads/master/kubeadm/config/90-disable-ipv6.conf >> "${LOG_FILE}" 2>&1
 result "$?"
 
 output "Disable IPv6 in grub"
@@ -129,7 +129,7 @@ sudo update-grub >> "${LOG_FILE}" 2>&1
 result "$?"
 
 output "Create rc.local"
-sudo wget -O /etc/rc.local https://raw.githubusercontent.com/pstickney/homelab/master/config/rc.local >> "${LOG_FILE}" 2>&1
+sudo wget -O /etc/rc.local https://raw.githubusercontent.com/pstickney/homelab/refs/heads/master/kubeadm/config/rc.local >> "${LOG_FILE}" 2>&1
 result "$?"
 
 output "Apply Sysctl System Config"
