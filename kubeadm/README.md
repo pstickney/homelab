@@ -61,6 +61,13 @@ Here is a breakdown of the VMs.
    ```shell
    curl -s https://raw.githubusercontent.com/pstickney/homelab/refs/heads/master/kubeadm/setup.sh | bash
    ```
+8. Restart VM
+
+## Create Clones
+At this point you want to create clones of your master node to repurpose into worker nodes.
+
+1. Clone the `k8s-master-1` and name it `k8s-worker-1` with ID 201
+2. Repeat for any more worker nodes that follows `k8s-worker-2` with ID 202 and so on...
 
 ## Create Kubernetes Control Plane
 
@@ -109,22 +116,20 @@ Here is a breakdown of the VMs.
    kubectl apply -f app-of-apps.yaml
    ```
 
-## Create Kubernetes Worker Nodes
-1. Clone the `k8s-master-1` and name it `k8s-worker-1` with ID 201
-2. Follow the same [Setup DHCP](#setup-dhcp) steps for the `k8s-worker-1` VM
-3. Run host rename
+## Join Worker Nodes to Cluster
+1. Follow the same [Setup DHCP](#setup-dhcp) steps for the `k8s-worker-X` VM
+2. Run host rename
    ```shell
    curl -s https://raw.githubusercontent.com/pstickney/homelab/refs/heads/master/kubeadm/rename-host.sh | bash -s HOST
    ```
-4. Reboot the VM
+3. Reboot the VM
    ```shell
    sudo reboot
    ```
-5. Join the worker node to the cluster
+4. Join the worker node to the cluster
    ```shell
    sudo kubeadm join 192.168.1.200:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
    ```
-6. Repeat for any more worker nodes
 
 [pfsense-download]: https://www.pfsense.org/download/
 [proxmox-download]: https://www.proxmox.com/en/downloads/category/iso-images-pve
