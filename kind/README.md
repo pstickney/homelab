@@ -56,7 +56,7 @@
 1. Follow setup instructions for the [dotfiles][dotfiles] repo.
 
 ### Create using `kind`
-1. Copy the [kind-cluster.yaml](./kind-cluster.yaml) to your VM
+1. Copy the [kind-cluster.yaml](kind-cluster.yaml) to your VM
    ```shell
    cd ~
    wget https://raw.githubusercontent.com/pstickney/homelab/refs/heads/kind/kind-cluster.yaml
