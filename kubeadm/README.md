@@ -80,8 +80,8 @@ At this point you want to create clones of your master node to repurpose into wo
    ```shell
    sudo kubeadm init \
         --skip-phases=addon/kube-proxy \
-        --pod-network-cidr=10.244.0.0/16 \
-        --service-cidr=10.246.0.0/16 \
+        --pod-network-cidr=10.200.0.0/17 \
+        --service-cidr=10.200.128.0/17 \
         --control-plane-endpoint=192.168.1.200 \
         --apiserver-advertise-address=192.168.1.200
    ```
