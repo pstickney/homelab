@@ -99,8 +99,11 @@ At this point you want to create clones of your master node to repurpose into wo
    ```shell
    helm upgrade --install --create-namespace -n cilium lab cilium
    ```
-
-2. Update CoreDNS
+3. Install Cilium Configs
+   ```shell
+   helm upgrade --install --create-namespace -n cilium lab cilium-config
+   ```
+4. Update CoreDNS
    ```shell
    kubectl apply -f cilium-config/coredns.yaml
    ```
@@ -111,7 +114,8 @@ At this point you want to create clones of your master node to repurpose into wo
    ```shell
    helm upgrade --install --create-namespace -n argocd lab argo-cd
    ```
-2. Install app-of-apps from argo-registry
+2. Checkout [argo-registry][argo-registry]
+3. Install app-of-apps
    ```shell
    kubectl apply -f app-of-apps.yaml
    ```
@@ -135,3 +139,4 @@ At this point you want to create clones of your master node to repurpose into wo
 [proxmox-download]: https://www.proxmox.com/en/downloads/category/iso-images-pve
 [ubuntu-download]: https://ubuntu.com/download/server
 [charts]: https://github.com/pstickney/charts
+[argo-registry]: https://github.com/pstickney/argo-registry

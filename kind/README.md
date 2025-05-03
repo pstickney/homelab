@@ -80,24 +80,28 @@
 
 ### Setup Networking
 
-1. Checkout the [charts][charts] repo 
+1. Checkout the [charts][charts] repo
 2. Install Cilium
    ```shell
    helm upgrade --install --create-namespace -n cilium lab cilium
    ```
-
-2. Update CoreDNS
+3. Install Cilium Configs
+   ```shell
+   helm upgrade --install --create-namespace -n cilium lab cilium-config
+   ```
+4. Update CoreDNS
    ```shell
    kubectl apply -f cilium-config/coredns.yaml
    ```
 
-## Configure 
+### Configure ArgoCD
 
 1. Install ArgoCD
    ```shell
    helm upgrade --install --create-namespace -n argocd lab argo-cd
    ```
-2. Install app-of-apps from argo-registry
+2. Checkout [argo-registry][argo-registry]
+3. Install app-of-apps
    ```shell
    kubectl apply -f app-of-apps.yaml
    ```
@@ -108,3 +112,4 @@
 [kind-download]: https://kind.sigs.k8s.io/
 [dotfiles]: https://github.com/pstickney/dotfiles
 [charts]: https://github.com/pstickney/charts
+[argo-registry]: https://github.com/pstickney/argo-registry
