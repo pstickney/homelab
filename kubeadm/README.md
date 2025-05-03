@@ -101,7 +101,7 @@ At this point you want to create clones of your master node to repurpose into wo
    ```
 3. Install Cilium Configs
    ```shell
-   helm upgrade --install --create-namespace -n cilium lab cilium-config
+   helm upgrade --install --create-namespace -n cilium-config lab cilium-config
    ```
 4. Update CoreDNS
    ```shell

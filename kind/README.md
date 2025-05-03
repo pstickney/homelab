@@ -87,7 +87,7 @@
    ```
 3. Install Cilium Configs
    ```shell
-   helm upgrade --install --create-namespace -n cilium lab cilium-config
+   helm upgrade --install --create-namespace -n cilium-config lab cilium-config
    ```
 4. Update CoreDNS
    ```shell
