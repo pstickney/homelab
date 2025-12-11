@@ -49,10 +49,10 @@ result "$?"
 
 # Add Kubernetes repo
 output "Adding Kubernetes GPG to Keyring"
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes.gpg >> "${LOG_FILE}" 2>&1
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes.gpg >> "${LOG_FILE}" 2>&1
 result "$?"
 output "Creating Kubernetes APT source"
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/kubernetes.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list >> "${LOG_FILE}" 2>&1
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/kubernetes.gpg] https://pkgs.k8s.io/core:/stable:/v1.34/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list >> "${LOG_FILE}" 2>&1
 result "$?"
 
 # Get requirements
