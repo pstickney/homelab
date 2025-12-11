@@ -85,15 +85,21 @@ At this point you want to create clones of your master node to repurpose into wo
         --control-plane-endpoint=192.168.1.200 \
         --apiserver-advertise-address=192.168.1.200
    ```
-3. Copy kubeconfig file
+3. Copy the `kubeadm join` command from the output and save it for later
+
+
+4. Copy kubeconfig file
    ```shell
    mkdir -p $HOME/.kube
    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
    sudo chown -R $(id -u):$(id -g) $HOME/.kube
    ```
+5. Copy the kubeconfig to your local machine
+   ```shell
+   scp k8s-master-1:~/.kube/config ~/.kube/kubeadm-lab
+   ```
 
 ### Setup Networking
-
 1. Checkout the [charts][charts] repo
 2. Install Cilium
    ```shell
@@ -108,18 +114,6 @@ At this point you want to create clones of your master node to repurpose into wo
    kubectl apply -f cilium-config/coredns.yaml
    ```
 
-### Configure ArgoCD
-
-1. Install ArgoCD
-   ```shell
-   helm upgrade --install --create-namespace -n argocd lab argo-cd
-   ```
-2. Checkout [argo-registry][argo-registry]
-3. Install app-of-apps
-   ```shell
-   kubectl apply -f app-of-apps.yaml
-   ```
-
 ## Join Worker Nodes to Cluster
 1. Follow the same [Setup DHCP](#setup-dhcp) steps for the `k8s-worker-X` VM
 2. Run host rename
@@ -130,9 +124,20 @@ At this point you want to create clones of your master node to repurpose into wo
    ```shell
    sudo reboot
    ```
-4. Join the worker node to the cluster
+4. Join the worker node to the cluster with `kubeadm join` command from earlier
    ```shell
    sudo kubeadm join 192.168.1.200:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
+   ```
+
+## Initialize Cluster with ArgoCD
+1. Install ArgoCD
+   ```shell
+   helm upgrade --install --create-namespace -n argocd lab argo-cd
+   ```
+2. Checkout [argo-registry][argo-registry]
+3. Install app-of-apps
+   ```shell
+   kubectl apply -f app-of-apps.yaml
    ```
 
 [pfsense-download]: https://www.pfsense.org/download/
