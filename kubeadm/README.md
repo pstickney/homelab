@@ -100,18 +100,29 @@ At this point you want to create clones of your master node to repurpose into wo
    ```
 
 ### Setup Networking
-1. Checkout the [charts][charts] repo
-2. Install Cilium
+1. Install Gateway API
+   ```shell
+   # GatewayClass, Gateway, HTTPRoute
+   kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.1/standard-install.yaml
+   # TCPRoute, TLSRoute, and UDPRoute
+   kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.1/experimental-install.yaml
+   ```
+2. Checkout the [charts][charts] repo
+3. Install Cilium
    ```shell
    helm upgrade --install --create-namespace -n cilium lab cilium
    ```
-3. Install Cilium Configs
+4. Install Cilium Configs
    ```shell
    helm upgrade --install --create-namespace -n cilium-config lab cilium-config
    ```
-4. Update CoreDNS
+5. Update CoreDNS
    ```shell
    kubectl apply -f cilium-config/coredns.yaml
+   ```
+6. Install Gateway API Configs
+   ```shell
+   helm upgrade --install --create-namespace -n kube-gateway lab gateway-api-config
    ```
 
 ## Join Worker Nodes to Cluster
